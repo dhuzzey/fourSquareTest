@@ -28,6 +28,7 @@ public class MainPresenter implements MainContract.Action {
         helper = volleyHelper;
 
         view.hideSpinner();
+        view.updateActionbar(R.string.actionBarDefault);
     }
 
     @Override
@@ -44,6 +45,10 @@ public class MainPresenter implements MainContract.Action {
             };
             handler = new Handler();
             handler.postDelayed(r, DELAY);
+        } else {
+            view.hideList();
+            view.hideSpinner();
+            view.updateActionbar(R.string.actionBarDefault);
         }
     }
 
@@ -63,11 +68,13 @@ public class MainPresenter implements MainContract.Action {
                 view.hideSpinner();
                 Log.w(LOG, "response " + response.getResponse().getGroups().get(0).getList().size());
                 view.updateList(response.getList());
+                view.updateActionbar(response.getResponse().getLocation());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 view.hideSpinner();
+                view.updateActionbar(R.string.actionBarDefault);
                 Log.w(LOG, "error " + error);
             }
         });

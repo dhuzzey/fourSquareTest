@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.huzzey.mobile.foursquaretest.R;
+import com.huzzey.mobile.foursquaretest.datatypes.Items;
 import com.huzzey.mobile.foursquaretest.datatypes.Venue;
-import com.huzzey.mobile.foursquaretest.model.FourSquareResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.ViewHolder> {
     private final String LOG = getClass().getSimpleName();
-    private List<FourSquareResponse.Items> list;
+    private List<Items> list;
     private LayoutInflater inflater;
     private Context context;
 
@@ -32,7 +32,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         this.context = context;
     }
 
-    public void updateData(List<FourSquareResponse.Items> list){
+    public void updateData(List<Items> list){
         this.list = list;
         notifyDataSetChanged();
     }
@@ -62,7 +62,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         Venue venue = list.get(position).getVenue();
         Log.w(LOG, "venue " + venue.getList().get(0).toString());
-        holder.venueName.setText(venue.getList().get(0).getName());
+        holder.venueName.setText(venue.getName());
         Glide.with(context).load(venue.getList().get(0).getIconUrl()).into(holder.venueImage);
     }
 }

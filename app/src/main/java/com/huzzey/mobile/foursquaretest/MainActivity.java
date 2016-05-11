@@ -11,9 +11,8 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.huzzey.mobile.foursquaretest.adapters.MainActivityAdapter;
-import com.huzzey.mobile.foursquaretest.datatypes.Venue;
+import com.huzzey.mobile.foursquaretest.datatypes.Items;
 import com.huzzey.mobile.foursquaretest.helpers.VolleyHelper;
-import com.huzzey.mobile.foursquaretest.model.FourSquareResponse;
 
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void updateList(List<FourSquareResponse.Items> list) {
+    public void updateList(List<Items> list) {
         resultList.setVisibility(View.VISIBLE);
         ((MainActivityAdapter)resultList.getAdapter()).updateData(list);
     }
@@ -79,5 +78,15 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void hideSpinner() {
         spinner.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void updateActionbar(String title) {
+        setTitle(title);
+    }
+
+    @Override
+    public void updateActionbar(int title) {
+        updateActionbar(getString(title));
     }
 }

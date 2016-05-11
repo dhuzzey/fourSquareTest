@@ -23,16 +23,9 @@ public class Venue {
     }
 
     public class Categories {
-        @SerializedName("name")
-        String name;
 
         @SerializedName("icon")
         Icon icon;
-
-        public String getName() {
-            return name;
-        }
-
 
         public Icon getIcon() {
             return icon;
@@ -45,13 +38,12 @@ public class Venue {
         @Override
         public String toString() {
             return "Categories{" +
-                    "name='" + name + '\'' +
-                    ", icon='" + icon.toString() + '\'' +
+                    " icon='" + icon.toString() + '\'' +
                     '}';
         }
     }
 
-    public class Icon {
+    private class Icon {
         @SerializedName("prefix")
         String prefix;
         @SerializedName("suffix")

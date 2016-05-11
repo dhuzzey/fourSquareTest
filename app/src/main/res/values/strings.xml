@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">foursquaretest</string>
+    <string name="actionBarDefault">Search</string>
 </resources>

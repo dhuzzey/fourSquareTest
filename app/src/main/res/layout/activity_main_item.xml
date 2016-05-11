@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="@dimen/activity_item_spacer"
+    android:background="@drawable/border_line">
 
     <ImageView
         android:id="@+id/venueImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="@dimen/activity_item_image_width"
+        android:layout_height="@dimen/activity_item_image_height" />
 
     <TextView
         android:id="@+id/venueName"
@@ -14,5 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/venueImage"
         android:layout_toEndOf="@+id/venueImage"
-        style="@style/Base.TextAppearance.AppCompat.Medium"/>
+        android:layout_centerVertical="true"
+        android:paddingLeft="@dimen/activity_item_spacer"
+        style="@style/Base.TextAppearance.AppCompat.Medium" />
 </RelativeLayout>

@@ -1,8 +1,8 @@
 package com.huzzey.mobile.foursquaretest.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.huzzey.mobile.foursquaretest.datatypes.Items;
 import com.huzzey.mobile.foursquaretest.datatypes.Meta;
-import com.huzzey.mobile.foursquaretest.datatypes.Venue;
 
 import java.util.List;
 
@@ -48,15 +48,6 @@ public class FourSquareResponse {
 
         public List<Items> getList() {
             return list;
-        }
-    }
-
-    public class Items {
-        @SerializedName("venue")
-        Venue venue;
-
-        public Venue getVenue() {
-            return venue;
         }
     }
 }
