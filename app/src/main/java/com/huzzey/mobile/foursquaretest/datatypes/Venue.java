@@ -14,11 +14,20 @@ public class Venue {
     @SerializedName("categories")
     List<Categories> list;
 
+    public List<Categories> getList() {
+        return list;
+    }
+
+    public String getName() {
+        return name;
+    }
 
     public class Categories {
         @SerializedName("name")
         String name;
 
-
+        public String getName() {
+            return name;
+        }
     }
 }

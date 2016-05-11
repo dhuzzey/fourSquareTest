@@ -2,6 +2,7 @@ package com.huzzey.mobile.foursquaretest;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,13 +10,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.huzzey.mobile.foursquaretest.adapters.MainActivityAdapter;
+import com.huzzey.mobile.foursquaretest.datatypes.Venue;
 import com.huzzey.mobile.foursquaretest.helpers.VolleyHelper;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
     private MainPresenter presenter;
     private RecyclerView resultList;
+    private MainActivityAdapter adapter;
     private ProgressBar spinner;
 
     @Inject
@@ -27,8 +33,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         AppApplication.getContextComponent().inject(this);
 
         setContentView(R.layout.activity_main);
-        presenter = new MainPresenter(this, volleyHelper, this);
-
 
         EditText searchEditText = (EditText) findViewById(R.id.searchEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {
@@ -48,7 +52,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             }
         });
         resultList = (RecyclerView) findViewById(R.id.resultList);
+        resultList.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new MainActivityAdapter(this);
+        resultList.setAdapter(adapter);
         spinner = (ProgressBar) findViewById(R.id.spinner);
+        presenter = new MainPresenter(this, volleyHelper);
     }
 
 
@@ -59,8 +67,9 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
     @Override
-    public void updateList() {
+    public void updateList(List<Venue> list) {
         resultList.setVisibility(View.VISIBLE);
+        adapter.updateData(list);
     }
 
     @Override

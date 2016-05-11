@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.huzzey.mobile.foursquaretest.R;
 import com.huzzey.mobile.foursquaretest.datatypes.Venue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,9 +21,14 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     private List<Venue> list;
     private LayoutInflater inflater;
 
-    public MainActivityAdapter(Context context, List<Venue> list) {
-        this.list = list;
+    public MainActivityAdapter(Context context) {
+        list = new ArrayList<>();
         inflater = LayoutInflater.from(context);
+    }
+
+    public void updateData(List<Venue> list){
+        this.list = list;
+        notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -48,6 +54,7 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        Venue venue = list.get(position);
+        holder.venueName.setText(venue.getName());
     }
 }

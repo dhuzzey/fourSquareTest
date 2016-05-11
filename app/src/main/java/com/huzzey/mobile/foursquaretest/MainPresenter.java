@@ -1,6 +1,5 @@
 package com.huzzey.mobile.foursquaretest;
 
-import android.content.Context;
 import android.os.Handler;
 import android.text.Editable;
 import android.util.Log;
@@ -19,16 +18,14 @@ public class MainPresenter implements MainContract.Action {
     private final String LOG = getClass().getSimpleName();
     private MainContract.View view;
     private VolleyHelper helper;
-    private Context context;
 
     private Runnable r;
     private Handler handler;
     private final long DELAY = 1000;
 
-    public MainPresenter(MainContract.View view, VolleyHelper volleyHelper, Context context) {
+    public MainPresenter(MainContract.View view, VolleyHelper volleyHelper) {
         this.view = view;
         helper = volleyHelper;
-        this.context = context;
 
         view.hideSpinner();
     }
@@ -42,7 +39,7 @@ public class MainPresenter implements MainContract.Action {
             r = new Runnable() {
                 @Override
                 public void run() {
-                    callAPI(context, s.toString());
+                    callAPI(s.toString());
                 }
             };
             handler = new Handler();
@@ -58,13 +55,14 @@ public class MainPresenter implements MainContract.Action {
         }
     }
 
-    private void callAPI(final Context context, String text) {
+    private void callAPI(String text) {
         String url = "https://api.foursquare.com/v2/venues/explore?near={1}&oauth_token=5JGFCSAMVKANQ4ADSB5KHOBC05BMSU2D3ZJNN1K15SAGCTXL&v=20160511";
         GsonRequest<FourSquareResponse> request = new GsonRequest<>(Request.Method.GET, url.replace("{1}", text), FourSquareResponse.class, new Response.Listener<FourSquareResponse>() {
             @Override
             public void onResponse(FourSquareResponse response) {
                 view.hideSpinner();
-                Log.w(LOG, "response " + response.getMeta().getCode());
+                Log.w(LOG, "response " + response.getResponse().getGroups().get(0).getList().size());
+                view.updateList(response.getList());
             }
         }, new Response.ErrorListener() {
             @Override
