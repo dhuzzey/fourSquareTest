@@ -24,9 +24,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppApplication.getContextComponent().inject(this);
+
         setContentView(R.layout.activity_main);
         presenter = new MainPresenter(this, volleyHelper, this);
-        AppApplication.getContextComponent().inject(this);
+
 
         EditText searchEditText = (EditText) findViewById(R.id.searchEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {

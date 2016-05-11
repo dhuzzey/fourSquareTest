@@ -29,11 +29,13 @@ public class MainPresenter implements MainContract.Action {
         this.view = view;
         helper = volleyHelper;
         this.context = context;
+
+        view.hideSpinner();
     }
 
     @Override
     public void afterTextChanged(final Editable s) {
-        if(s.toString().length() > 3) {
+        if(s.toString().length() >= 3) {
             view.hideList();
             view.showSpinner();
 
@@ -62,7 +64,7 @@ public class MainPresenter implements MainContract.Action {
             @Override
             public void onResponse(FourSquareResponse response) {
                 view.hideSpinner();
-                Log.w(LOG, "response " + response);
+                Log.w(LOG, "response " + response.getMeta().getCode());
             }
         }, new Response.ErrorListener() {
             @Override
