@@ -33,7 +33,7 @@ public class MainPresenter implements MainContract.Action {
 
     @Override
     public void afterTextChanged(final Editable s) {
-        if(s.toString().length() >= 3) {
+        if(s != null && s.toString().length() >= 3) {
             view.hideList();
             view.showSpinner();
 

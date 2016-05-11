@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.huzzey.mobile.foursquaretest.R;
 import com.huzzey.mobile.foursquaretest.datatypes.Items;
 import com.huzzey.mobile.foursquaretest.datatypes.Venue;
@@ -24,12 +25,12 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
     private final String LOG = getClass().getSimpleName();
     private List<Items> list;
     private LayoutInflater inflater;
-    private Context context;
+    private RequestManager glideManager;
 
     public MainActivityAdapter(Context context) {
         list = new ArrayList<>();
         inflater = LayoutInflater.from(context);
-        this.context = context;
+        glideManager = Glide.with(context);
     }
 
     public void updateData(List<Items> list){
@@ -63,6 +64,6 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
         Venue venue = list.get(position).getVenue();
         Log.w(LOG, "venue " + venue.getList().get(0).toString());
         holder.venueName.setText(venue.getName());
-        Glide.with(context).load(venue.getList().get(0).getIconUrl()).into(holder.venueImage);
+        glideManager.load(venue.getList().get(0).getIconUrl()).into(holder.venueImage);
     }
 }
