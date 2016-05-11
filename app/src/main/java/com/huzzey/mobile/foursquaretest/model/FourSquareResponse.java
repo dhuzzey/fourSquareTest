@@ -15,7 +15,7 @@ public class FourSquareResponse {
     @SerializedName("response")
     Response response;
 
-    public List<Venue> getList() {
+    public List<Items> getList() {
         return response.getGroups().get(0).getList();
     }
 
@@ -44,10 +44,19 @@ public class FourSquareResponse {
 
     public class Group {
         @SerializedName("items")
-        List<Venue> list;
+        List<Items> list;
 
-        public List<Venue> getList() {
+        public List<Items> getList() {
             return list;
+        }
+    }
+
+    public class Items {
+        @SerializedName("venue")
+        Venue venue;
+
+        public Venue getVenue() {
+            return venue;
         }
     }
 }

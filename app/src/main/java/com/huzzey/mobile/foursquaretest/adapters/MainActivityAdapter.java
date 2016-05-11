@@ -2,14 +2,17 @@ package com.huzzey.mobile.foursquaretest.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.huzzey.mobile.foursquaretest.R;
 import com.huzzey.mobile.foursquaretest.datatypes.Venue;
+import com.huzzey.mobile.foursquaretest.model.FourSquareResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +21,18 @@ import java.util.List;
  * Created by darren.huzzey on 11/05/16.
  */
 public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapter.ViewHolder> {
-    private List<Venue> list;
+    private final String LOG = getClass().getSimpleName();
+    private List<FourSquareResponse.Items> list;
     private LayoutInflater inflater;
+    private Context context;
 
     public MainActivityAdapter(Context context) {
         list = new ArrayList<>();
         inflater = LayoutInflater.from(context);
+        this.context = context;
     }
 
-    public void updateData(List<Venue> list){
+    public void updateData(List<FourSquareResponse.Items> list){
         this.list = list;
         notifyDataSetChanged();
     }
@@ -54,7 +60,9 @@ public class MainActivityAdapter extends RecyclerView.Adapter<MainActivityAdapte
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Venue venue = list.get(position);
-        holder.venueName.setText(venue.getName());
+        Venue venue = list.get(position).getVenue();
+        Log.w(LOG, "venue " + venue.getList().get(0).toString());
+        holder.venueName.setText(venue.getList().get(0).getName());
+        Glide.with(context).load(venue.getList().get(0).getIconUrl()).into(holder.venueImage);
     }
 }

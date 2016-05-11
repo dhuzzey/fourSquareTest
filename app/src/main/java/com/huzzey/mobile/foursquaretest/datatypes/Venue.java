@@ -26,8 +26,51 @@ public class Venue {
         @SerializedName("name")
         String name;
 
+        @SerializedName("icon")
+        Icon icon;
+
         public String getName() {
             return name;
+        }
+
+
+        public Icon getIcon() {
+            return icon;
+        }
+
+        public String getIconUrl(){
+            return icon.getPrefix() + "bg_64" + icon.getSuffix();
+        }
+
+        @Override
+        public String toString() {
+            return "Categories{" +
+                    "name='" + name + '\'' +
+                    ", icon='" + icon.toString() + '\'' +
+                    '}';
+        }
+    }
+
+    public class Icon {
+        @SerializedName("prefix")
+        String prefix;
+        @SerializedName("suffix")
+        String suffix;
+
+        public String getPrefix() {
+            return prefix;
+        }
+
+        public String getSuffix() {
+            return suffix;
+        }
+
+        @Override
+        public String toString() {
+            return "Icon{" +
+                    "prefix='" + prefix + '\'' +
+                    ", suffix='" + suffix + '\'' +
+                    '}';
         }
     }
 }

@@ -2,7 +2,7 @@ package com.huzzey.mobile.foursquaretest;
 
 import android.text.Editable;
 
-import com.huzzey.mobile.foursquaretest.datatypes.Venue;
+import com.huzzey.mobile.foursquaretest.model.FourSquareResponse;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public interface MainContract {
 
     interface View {
-        void updateList(List<Venue> list);
+        void updateList(List<FourSquareResponse.Items> list);
         void hideList();
         void showSpinner();
         void hideSpinner();
