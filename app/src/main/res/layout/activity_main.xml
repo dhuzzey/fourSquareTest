@@ -9,8 +9,24 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.huzzey.mobile.foursquaretest.MainActivity">
 
-    <TextView
+    <EditText
+        android:id="@+id/searchEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/resultList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchEditText"/>
+
+    <ProgressBar
+        android:id="@+id/spinner"
+        android:layout_below="@+id/searchEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_centerHorizontal="true"
+        style="?android:attr/progressBarStyle"
+        />
 </RelativeLayout>
