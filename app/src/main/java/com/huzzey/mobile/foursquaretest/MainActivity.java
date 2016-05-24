@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
             @Override
             public void afterTextChanged(Editable s) {
-                presenter.afterTextChanged(s);
+                presenter.afterTextChanged(s.toString());
             }
         });
         resultList = (RecyclerView) findViewById(R.id.resultList);
@@ -58,6 +58,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.onResume();
+    }
 
     @Override
     public void hideList() {

@@ -1,7 +1,5 @@
 package com.huzzey.mobile.foursquaretest;
 
-import android.text.Editable;
-
 import com.huzzey.mobile.foursquaretest.datatypes.Items;
 
 import java.util.List;
@@ -21,7 +19,8 @@ public interface MainContract {
     }
 
     interface Action {
+        void onResume();
         void onTextChanged();
-        void afterTextChanged(Editable s);
+        void afterTextChanged(String s);
     }
 }

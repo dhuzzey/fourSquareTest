@@ -1,7 +1,6 @@
 package com.huzzey.mobile.foursquaretest;
 
 import android.os.Handler;
-import android.text.Editable;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -26,21 +25,24 @@ public class MainPresenter implements MainContract.Action {
     public MainPresenter(MainContract.View view, VolleyHelper volleyHelper) {
         this.view = view;
         helper = volleyHelper;
+    }
 
+    @Override
+    public void onResume() {
         view.hideSpinner();
         view.updateActionbar(R.string.actionBarDefault);
     }
 
     @Override
-    public void afterTextChanged(final Editable s) {
-        if(s != null && s.toString().length() >= 3) {
+    public void afterTextChanged(final String s) {
+        if(s != null && s.length() >= 3) {
             view.hideList();
             view.showSpinner();
 
             r = new Runnable() {
                 @Override
                 public void run() {
-                    callAPI(s.toString());
+                    callAPI(s);
                 }
             };
             handler = new Handler();
