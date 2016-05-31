@@ -1,16 +1,16 @@
 package com.huzzey.mobile.foursquaretest;
 
-import android.os.Handler;
-
-import com.huzzey.mobile.foursquaretest.helpers.VolleyHelper;
+import com.huzzey.mobile.foursquaretest.datatypes.Items;
+import com.huzzey.mobile.foursquaretest.model.GetDataMock;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by darren.huzzey on 11/05/16.
@@ -18,22 +18,19 @@ import static org.mockito.Mockito.when;
 public class MainPresenterTest {
     @Mock
     MainContract.View view;
-    @Mock
-    VolleyHelper helper;
 
-    private MainPresenter presenter;
+    GetDataMock getData;
 
-    //private EditText mMockedEditable;
+
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        presenter = new MainPresenter(view, helper);
-        //mMockedEditable = mock(EditText.class);
     }
 
     @Test
     public void testInitialState() throws Exception {
+        MainPresenter presenter = new MainPresenter(view, getData);
         presenter.onResume();
         verify(view).hideSpinner();
         verify(view).updateActionbar(R.string.actionBarDefault);
@@ -41,7 +38,7 @@ public class MainPresenterTest {
 
     @Test
     public void testTypedLessThanThreeChars() throws Exception {
-        //mMockedEditable.setText("te");
+        MainPresenter presenter = new MainPresenter(view, getData);
         presenter.afterTextChanged("te");
         verify(view).hideList();
         verify(view).hideSpinner();
@@ -49,13 +46,23 @@ public class MainPresenterTest {
     }
 
     @Test
-    public void testTypeMorethanThreeChars() throws Exception {
-        //mMockedEditable.setText("test");
-        //when(mMockedEditable.getText()).thenReturn(new Editable.Factory.getInstance().newEditable("test"));
-        //Handler handler = new Handler();
-        when(new Handler().postDelayed(null, 0)).thenReturn(true);
+    public void testTypeMorethanThreeCharsPass() throws Exception {
+        getData = new GetDataMock(GetDataMock.GETDATAPASS);
+        MainPresenter presenter = new MainPresenter(view, getData);
         presenter.afterTextChanged("test");
-        verify(view).hideList();
-        verify(view).showSpinner();
+
+        verify(view).updateList(new ArrayList<Items>());
+        verify(view).hideSpinner();
+        verify(view).updateActionbar("");
+    }
+
+    @Test
+    public void testTypeMorethanThreeCharsFail() throws Exception {
+        getData = new GetDataMock(GetDataMock.GETDATAFAIL);
+        MainPresenter presenter = new MainPresenter(view, getData);
+        presenter.afterTextChanged("test");
+
+        verify(view).hideSpinner();
+        verify(view).updateActionbar(R.string.actionBarDefault);
     }
 }

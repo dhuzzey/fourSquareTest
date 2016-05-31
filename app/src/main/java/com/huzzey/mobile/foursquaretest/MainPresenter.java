@@ -1,14 +1,10 @@
 package com.huzzey.mobile.foursquaretest;
 
-import android.os.Handler;
 import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.huzzey.mobile.foursquaretest.helpers.VolleyHelper;
 import com.huzzey.mobile.foursquaretest.model.FourSquareResponse;
-import com.huzzey.mobile.foursquaretest.model.GsonRequest;
+import com.huzzey.mobile.foursquaretest.model.GetData;
+import com.huzzey.mobile.foursquaretest.model.GetDataContract;
 
 /**
  * Created by darren.huzzey on 11/05/16.
@@ -16,15 +12,15 @@ import com.huzzey.mobile.foursquaretest.model.GsonRequest;
 public class MainPresenter implements MainContract.Action {
     private final String LOG = getClass().getSimpleName();
     private MainContract.View view;
-    private VolleyHelper helper;
+    private GetDataContract getData;
 
-    private Runnable r;
-    private Handler handler;
-    private final long DELAY = 1000;
+//    private Runnable r;
+//    private Handler handler;
+//    private final long DELAY = 1000;
 
-    public MainPresenter(MainContract.View view, VolleyHelper volleyHelper) {
+    public MainPresenter(MainContract.View view, GetDataContract getData) {
         this.view = view;
-        helper = volleyHelper;
+        this.getData = getData;
     }
 
     @Override
@@ -39,14 +35,14 @@ public class MainPresenter implements MainContract.Action {
             view.hideList();
             view.showSpinner();
 
-            r = new Runnable() {
-                @Override
-                public void run() {
-                    callAPI(s);
-                }
-            };
-            handler = new Handler();
-            handler.postDelayed(r, DELAY);
+//            r = new Runnable() {
+//                @Override
+//                public void run() {
+                getData.callApi(getDataInterface(), s);
+//                }
+//            };
+//            handler = new Handler();
+//            handler.postDelayed(r, DELAY);
         } else {
             view.hideList();
             view.hideSpinner();
@@ -56,30 +52,34 @@ public class MainPresenter implements MainContract.Action {
 
     @Override
     public void onTextChanged() {
-        if(handler != null){
-            handler.removeCallbacks(r);
-            helper.cancelQueue();
-        }
+//        if(handler != null){
+//            handler.removeCallbacks(r);
+            getData.cancelCall();
+//        }
     }
 
-    private void callAPI(String text) {
-        String url = "https://api.foursquare.com/v2/venues/explore?near={1}&oauth_token=5JGFCSAMVKANQ4ADSB5KHOBC05BMSU2D3ZJNN1K15SAGCTXL&v=20160511";
-        GsonRequest<FourSquareResponse> request = new GsonRequest<>(Request.Method.GET, url.replace("{1}", text), FourSquareResponse.class, new Response.Listener<FourSquareResponse>() {
+    private GetData.GetDataInterface getDataInterface(){
+        return new GetData.GetDataInterface() {
             @Override
-            public void onResponse(FourSquareResponse response) {
+            public void onSuccess(FourSquareResponse response) {
                 view.hideSpinner();
-                Log.w(LOG, "response " + response.getResponse().getGroups().get(0).getList().size());
                 view.updateList(response.getList());
                 view.updateActionbar(response.getResponse().getLocation());
             }
-        }, new Response.ErrorListener() {
+
             @Override
-            public void onErrorResponse(VolleyError error) {
+            public void onError() {
                 view.hideSpinner();
                 view.updateActionbar(R.string.actionBarDefault);
-                Log.w(LOG, "error " + error);
             }
-        });
-        helper.addToRequestQueue(request);
+        };
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.w(LOG, "ondestroy");
+        getData.cancelCall();
+        getData = null;
+        view = null;
     }
 }

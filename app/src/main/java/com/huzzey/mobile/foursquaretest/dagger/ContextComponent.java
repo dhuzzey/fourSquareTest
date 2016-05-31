@@ -1,6 +1,6 @@
 package com.huzzey.mobile.foursquaretest.dagger;
 
-import com.huzzey.mobile.foursquaretest.MainActivity;
+import com.huzzey.mobile.foursquaretest.model.GetData;
 
 import javax.inject.Singleton;
 
@@ -12,5 +12,5 @@ import dagger.Component;
 @Singleton
 @Component(modules = ContextModules.class)
 public interface ContextComponent {
-    void inject(MainActivity mainActivity);
+    void inject(GetData data);
 }

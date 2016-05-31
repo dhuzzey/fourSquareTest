@@ -22,5 +22,6 @@ public interface MainContract {
         void onResume();
         void onTextChanged();
         void afterTextChanged(String s);
+        void onDestroy();
     }
 }

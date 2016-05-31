@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import com.huzzey.mobile.foursquaretest.datatypes.Items;
 import com.huzzey.mobile.foursquaretest.datatypes.Meta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,8 +16,16 @@ public class FourSquareResponse {
     @SerializedName("response")
     Response response;
 
+    public FourSquareResponse() {
+        response = new Response();
+    }
+
     public List<Items> getList() {
-        return response.getGroups().get(0).getList();
+        try {
+            return response.getGroups().get(0).getList();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     public Response getResponse() {
@@ -38,7 +47,7 @@ public class FourSquareResponse {
         }
 
         public String getLocation() {
-            return location;
+            return location == null ? "" : location;
         }
     }
 

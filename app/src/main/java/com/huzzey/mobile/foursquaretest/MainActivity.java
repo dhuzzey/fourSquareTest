@@ -12,24 +12,18 @@ import android.widget.ProgressBar;
 
 import com.huzzey.mobile.foursquaretest.adapters.MainActivityAdapter;
 import com.huzzey.mobile.foursquaretest.datatypes.Items;
-import com.huzzey.mobile.foursquaretest.helpers.VolleyHelper;
+import com.huzzey.mobile.foursquaretest.model.GetData;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
     private MainPresenter presenter;
     private RecyclerView resultList;
     private ProgressBar spinner;
 
-    @Inject
-    VolleyHelper volleyHelper;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppApplication.getContextComponent().inject(this);
 
         setContentView(R.layout.activity_main);
 
@@ -54,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         resultList.setLayoutManager(new LinearLayoutManager(this));
         resultList.setAdapter(new MainActivityAdapter(MainActivity.this));
         spinner = (ProgressBar) findViewById(R.id.spinner);
-        presenter = new MainPresenter(this, volleyHelper);
+        presenter = new MainPresenter(this, new GetData());
     }
 
 
@@ -93,5 +87,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     @Override
     public void updateActionbar(int title) {
         updateActionbar(getString(title));
+    }
+
+    @Override
+    protected void onDestroy() {
+        presenter.onDestroy();
+        super.onDestroy();
     }
 }
