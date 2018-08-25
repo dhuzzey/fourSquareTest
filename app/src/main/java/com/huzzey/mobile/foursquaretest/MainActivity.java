@@ -1,5 +1,7 @@
 package com.huzzey.mobile.foursquaretest;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,22 +14,33 @@ import android.widget.ProgressBar;
 
 import com.huzzey.mobile.foursquaretest.adapters.MainActivityAdapter;
 import com.huzzey.mobile.foursquaretest.datatypes.Items;
-import com.huzzey.mobile.foursquaretest.model.GetData;
+import com.huzzey.mobile.foursquaretest.model.FourSquareResponse;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
-    private MainPresenter presenter;
-    private RecyclerView resultList;
-    private ProgressBar spinner;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+
+public class MainActivity extends AppCompatActivity {
+    @BindView(R.id.searchEditText) EditText searchEditText;
+    @BindView(R.id.resultList) RecyclerView resultList;
+    @BindView(R.id.spinner) ProgressBar spinner;
+
+    private MainViewModel presenter;
+    public ViewModelProvider viewModelProvider;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
+        presenter = getProvider().get(MainViewModel.class);
 
-        EditText searchEditText = (EditText) findViewById(R.id.searchEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -36,62 +49,85 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                presenter.onTextChanged();
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                presenter.afterTextChanged(s.toString());
+                if(s != null && s.length() >= 3) {
+                    hideList();
+                    spinner.setVisibility(View.VISIBLE);
+                    presenter.afterTextChanged(s.toString())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new SingleObserver<FourSquareResponse>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
+
+                                }
+
+                                @Override
+                                public void onSuccess(FourSquareResponse fourSquareResponse) {
+                                    hideSpinner();
+                                    updateList(fourSquareResponse.getList());
+                                    updateActionbar(fourSquareResponse.getResponse().getLocation());
+                                }
+
+                                @Override
+                                public void onError(Throwable e) {
+                                    hideSpinner();
+                                    updateActionbar(R.string.actionBarDefault);
+                                }
+                            });
+                } else {
+                    hideList();
+                    hideSpinner();
+                    updateActionbar(R.string.actionBarDefault);
+                }
             }
         });
-        resultList = (RecyclerView) findViewById(R.id.resultList);
         resultList.setLayoutManager(new LinearLayoutManager(this));
         resultList.setAdapter(new MainActivityAdapter(MainActivity.this));
-        spinner = (ProgressBar) findViewById(R.id.spinner);
-        presenter = new MainPresenter(this, new GetData());
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.onResume();
+        hideSpinner();
+        updateActionbar(R.string.actionBarDefault);
     }
 
-    @Override
+
     public void hideList() {
         resultList.setVisibility(View.GONE);
     }
 
-    @Override
+
     public void updateList(List<Items> list) {
         resultList.setVisibility(View.VISIBLE);
         ((MainActivityAdapter)resultList.getAdapter()).updateData(list);
     }
 
-    @Override
-    public void showSpinner() {
-        spinner.setVisibility(View.VISIBLE);
-    }
 
-    @Override
+
     public void hideSpinner() {
         spinner.setVisibility(View.GONE);
     }
 
-    @Override
+
     public void updateActionbar(String title) {
         setTitle(title);
     }
 
-    @Override
+
     public void updateActionbar(int title) {
         updateActionbar(getString(title));
     }
 
-    @Override
-    protected void onDestroy() {
-        presenter.onDestroy();
-        super.onDestroy();
+    public ViewModelProvider getProvider() {
+        if (viewModelProvider == null) {
+            viewModelProvider = ViewModelProviders.of(this);
+        }
+        return viewModelProvider;
     }
 }

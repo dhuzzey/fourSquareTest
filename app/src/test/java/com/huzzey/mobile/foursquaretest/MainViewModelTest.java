@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verify;
 /**
  * Created by darren.huzzey on 11/05/16.
  */
-public class MainPresenterTest {
+public class MainViewModelTest {
     @Mock
     MainContract.View view;
 
@@ -30,7 +30,7 @@ public class MainPresenterTest {
 
     @Test
     public void testInitialState() throws Exception {
-        MainPresenter presenter = new MainPresenter(view, getData);
+        MainViewModel presenter = new MainViewModel(view, getData);
         presenter.onResume();
         verify(view).hideSpinner();
         verify(view).updateActionbar(R.string.actionBarDefault);
@@ -38,7 +38,7 @@ public class MainPresenterTest {
 
     @Test
     public void testTypedLessThanThreeChars() throws Exception {
-        MainPresenter presenter = new MainPresenter(view, getData);
+        MainViewModel presenter = new MainViewModel(view, getData);
         presenter.afterTextChanged("te");
         verify(view).hideList();
         verify(view).hideSpinner();
@@ -48,7 +48,7 @@ public class MainPresenterTest {
     @Test
     public void testTypeMorethanThreeCharsPass() throws Exception {
         getData = new GetDataMock(GetDataMock.GETDATAPASS);
-        MainPresenter presenter = new MainPresenter(view, getData);
+        MainViewModel presenter = new MainViewModel(view, getData);
         presenter.afterTextChanged("test");
 
         verify(view).updateList(new ArrayList<Items>());
@@ -59,7 +59,7 @@ public class MainPresenterTest {
     @Test
     public void testTypeMorethanThreeCharsFail() throws Exception {
         getData = new GetDataMock(GetDataMock.GETDATAFAIL);
-        MainPresenter presenter = new MainPresenter(view, getData);
+        MainViewModel presenter = new MainViewModel(view, getData);
         presenter.afterTextChanged("test");
 
         verify(view).hideSpinner();

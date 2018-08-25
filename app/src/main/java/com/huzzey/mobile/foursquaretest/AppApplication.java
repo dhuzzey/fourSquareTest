@@ -6,6 +6,7 @@ import com.huzzey.mobile.foursquaretest.dagger.ContextComponent;
 import com.huzzey.mobile.foursquaretest.dagger.ContextModules;
 import com.huzzey.mobile.foursquaretest.dagger.DaggerContextComponent;
 
+
 /**
  * Created by darren.huzzey on 11/05/16.
  */
@@ -16,7 +17,8 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        contextComponent = DaggerContextComponent.builder().contextModules(new ContextModules(this)).build();
+        contextComponent = DaggerContextComponent.builder()
+                .contextModules(new ContextModules(this)).build();
 
     }
 
